@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   const { deployment, admin, label } = await req.json();
 
   const chain = deployment === "dev" ? b3Sepolia : b3;
-  const contractAddress =
+  const factoryContractAddress =
     deployment === "dev"
       ? B3SepoliaLeaderBoardFactoryContractAddress
       : MainnetLeaderBoardFactoryContractAddress;
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     // Call the deployLeaderboard function
     const response = await engine.contract.write(
       chain?.id.toString(),
-      contractAddress,
+      factoryContractAddress,
       backendWallet,
       {
         functionName: LeaderboardFunction.deployLeaderboard,

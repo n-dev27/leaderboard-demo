@@ -1,14 +1,12 @@
-import { SetScoreProps } from "@/types";
+import { CreateLeaderboardProps } from "@/types";
 
-export async function setScore({
+export async function getLeaderboard({
   deployment,
   label,
   title,
-  players,
-  scores,
-}: SetScoreProps) {
+}: CreateLeaderboardProps) {
   try {
-    const response = await fetch("/api/setScore", {
+    const response = await fetch("/api/getLeaderboard", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17,20 +15,20 @@ export async function setScore({
         deployment,
         label,
         title,
-        players,
-        scores,
       }),
     });
 
+    console.log("response === ", response);
+
     if (!response.ok) {
-      console.error("Failed to set scores");
+      console.error("Failed to fetch leaderboard");
     } else {
       const data = await response.json();
-      console.log("Set scores response: ", data);
+      console.log("Fetch response: ", data);
 
       return data;
     }
   } catch (error) {
-    console.log("setScore error === ", error);
+    console.log("fetch error === ", error);
   }
 }

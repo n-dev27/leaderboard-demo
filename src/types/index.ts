@@ -17,6 +17,14 @@ export interface CreateLeaderboardProps {
   title: string;
 }
 
+export interface SetScoreProps {
+  deployment: "dev" | "prod";
+  label: string;
+  title: string;
+  players: string[];
+  scores: number[];
+}
+
 export interface DeployLeaderboardDialogType {
   admin: string;
   label: string;
