@@ -17,17 +17,38 @@ export interface CreateLeaderboardProps {
   title: string;
 }
 
+export interface AddAdminProps {
+  deployment: "dev" | "prod";
+  label: string;
+  newAdmin: string;
+}
+
 export interface SetScoreProps {
   deployment: "dev" | "prod";
   label: string;
   title: string;
-  players: string[];
-  scores: number[];
+  players: string;
+  scores: number;
 }
 
-export interface DeployLeaderboardDialogType {
-  admin: string;
-  label: string;
+export interface AddAdminModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface AddPlayersModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+}
+
+export interface AdminDialogType {
+  newAdmin: string;
+}
+
+export interface PlayersDialogType {
+  players: string;
+  scores: number;
 }
 
 export interface DialogProps {

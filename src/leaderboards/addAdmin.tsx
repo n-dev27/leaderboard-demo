@@ -1,51 +1,30 @@
-import {
-  B3SepoliaLeaderBoardFactoryContractAddress,
-  MainnetLeaderBoardFactoryContractAddress,
-  LeaderboardABI,
-} from "@b3dotfun/leaderboards";
-import { backendWallet, engine } from "@/thirdweb/engine";
-import { b3, b3Sepolia } from "viem/chains";
-import { LeaderboardFunction } from "../lib/fuction";
+import { AddAdminProps } from "@/types";
 
-interface AddAdminProps {
-  deployment: "dev" | "prod";
-  newAdmin: string;
-}
-export async function addAdmin({ deployment, newAdmin }: AddAdminProps) {
-  const chain = deployment === "dev" ? b3Sepolia : b3;
-  const contractAddress =
-    deployment === "dev"
-      ? B3SepoliaLeaderBoardFactoryContractAddress
-      : MainnetLeaderBoardFactoryContractAddress;
+export async function addAdmin({ deployment, label, newAdmin }: AddAdminProps) {
+  try {
+    const response = await fetch("/api/addAdmin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        deployment,
+        label,
+        newAdmin,
+      }),
+    });
 
-  console.log("backendWallet === ", backendWallet);
+    console.log("response === ", response);
 
-  const response = await engine.contract.write(
-    chain?.id.toString(),
-    contractAddress,
-    backendWallet!,
-    {
-      functionName: LeaderboardFunction.addAdmin,
-      args: [newAdmin],
-      abi: LeaderboardABI as any,
-    },
-    false
-  );
+    if (!response.ok) {
+      console.error("Failed to create leaderboard");
+    } else {
+      const data = await response.json();
+      console.log("Create response: ", data);
 
-  console.log("Add admin response:", response);
-  const queueId = response.result.queueId;
-
-  let status;
-  do {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    status = await engine.transaction.status(queueId);
-  } while (
-    status.result.status === "queued" ||
-    status.result.status === "sent"
-  );
-
-  if (status.result.status === "mined") {
-    console.log("Add admin Transaction Success");
+      return data;
+    }
+  } catch (error) {
+    console.log("create error === ", error);
   }
 }

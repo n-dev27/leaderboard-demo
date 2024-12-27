@@ -39,6 +39,8 @@ export default function ViewLeaderboard() {
         title: "Leaderboard fetched successfully",
         description: "Your leaderboard has been fetched successfully",
       });
+      localStorage.setItem("label", label);
+      localStorage.setItem("status", JSON.stringify(response.status));
       router.push(`/${title}`);
     } else {
       toast({

@@ -9,7 +9,7 @@ import { backendWallet, engine } from "@/thirdweb/engine";
 import { LeaderboardFunction } from "@/lib/fuction";
 
 export async function POST(req: NextRequest) {
-  const { deployment, label, title, players, scores } = await req.json();
+  const { deployment, label, newAdmin } = await req.json();
 
   const chain = deployment === "dev" ? b3Sepolia : b3;
   const factoryContractAddress =
@@ -26,6 +26,8 @@ export async function POST(req: NextRequest) {
       label
     );
 
+    console.log("address === ", leaderboardAddress);
+
     if (leaderboardAddress?.result) {
       // Call the createLeaderboard function
       const response = await engine.contract.write(
@@ -33,8 +35,8 @@ export async function POST(req: NextRequest) {
         leaderboardAddress.result,
         backendWallet!,
         {
-          functionName: LeaderboardFunction.setScores,
-          args: [title, [players], [scores]],
+          functionName: LeaderboardFunction.addAdmin,
+          args: [newAdmin],
           abi: LeaderboardABI as any,
         },
         false
