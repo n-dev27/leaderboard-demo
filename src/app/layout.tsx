@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, Context, useState } from "react";
+import { createContext, Context, useState, useEffect } from "react";
 import { siteConfig } from "@/config/site";
 import { fontMono, fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
@@ -20,7 +20,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [label, setLabel] = useState(localStorage.getItem("label") || "");
+  const [label, setLabel] = useState<string>("");
+
+  useEffect(() => {
+    const storedLabel = localStorage.getItem("label");
+    if (storedLabel) {
+      setLabel(storedLabel);
+    }
+  }, []);
 
   return (
     <html lang="en" suppressHydrationWarning>

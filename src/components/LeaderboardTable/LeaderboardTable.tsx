@@ -12,7 +12,13 @@ import IndexLoading from "@/app/loading";
 import { LayoutContext } from "@/app/layout";
 import { LayoutContextType } from "@/types";
 
-export default function LeaderboardTable({ title }: { title: string }) {
+export default function LeaderboardTable({
+  title,
+  isRefetchPlayers,
+}: {
+  title: string;
+  isRefetchPlayers: boolean;
+}) {
   const { label } = useContext<LayoutContextType>(
     LayoutContext as React.Context<LayoutContextType>
   );
@@ -37,7 +43,7 @@ export default function LeaderboardTable({ title }: { title: string }) {
       setLoading(false);
     };
     fetch();
-  }, []);
+  }, [isRefetchPlayers]);
 
   if (loading) {
     return <IndexLoading />;

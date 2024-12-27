@@ -44,12 +44,16 @@ export interface SetScoreProps {
 export interface AddAdminModalProps {
   isOpen: boolean;
   onClose: () => void;
+  isRefetchAdmin: boolean;
+  setIsRefetchAdmin: (isRefetchAdmin: boolean) => void;
 }
 
 export interface AddPlayersModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  isRefetchPlayers: boolean;
+  setIsRefetchPlayers: (isRefetchPlayers: boolean) => void;
 }
 
 export interface AdminDialogType {

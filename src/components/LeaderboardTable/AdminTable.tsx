@@ -12,7 +12,11 @@ import IndexLoading from "@/app/loading";
 import { LayoutContext } from "@/app/layout";
 import { LayoutContextType } from "@/types";
 
-export default function AdminTable() {
+export default function AdminTable({
+  isRefetchAdmin,
+}: {
+  isRefetchAdmin: boolean;
+}) {
   const { label } = useContext<LayoutContextType>(
     LayoutContext as React.Context<LayoutContextType>
   );
@@ -35,7 +39,7 @@ export default function AdminTable() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [isRefetchAdmin]);
 
   if (loading) {
     return <IndexLoading />;

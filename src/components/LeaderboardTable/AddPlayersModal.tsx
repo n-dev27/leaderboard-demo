@@ -32,6 +32,8 @@ export default function AddPlayersModal({
   isOpen,
   onClose,
   title,
+  isRefetchPlayers,
+  setIsRefetchPlayers,
 }: AddPlayersModalProps) {
   const { toast } = useToast();
 
@@ -60,13 +62,14 @@ export default function AddPlayersModal({
 
     if (response.status === "mined") {
       toast({
-        title: "New Admin added successfully",
-        description: "New Admin has been added successfully",
+        title: "New Player added successfully",
+        description: "New Player has been added successfully",
       });
+      setIsRefetchPlayers(!isRefetchPlayers);
       onClose();
     } else {
       toast({
-        title: "New Admin addition failed",
+        title: "New Player addition failed",
         description: "Please try again",
       });
     }
@@ -122,7 +125,7 @@ export default function AddPlayersModal({
                     className="text-white"
                   />
                 ) : (
-                  "Add New Admin"
+                  "Add New Player"
                 )}
               </Button>
             </form>

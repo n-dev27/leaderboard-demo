@@ -17,6 +17,8 @@ export default function Leaderboard({ params }: { params: string }) {
   const [isPlayersLoading, setIsPlayersLoading] = useState<boolean>(false);
   const [isAddAdminModalOpen, setIsAddAdminModalOpen] = useState(false);
   const [isAddPlayersModalOpen, setIsAddPlayersModalOpen] = useState(false);
+  const [isRefetchAdmin, setIsRefetchAdmin] = useState<boolean>(true);
+  const [isRefetchPlayers, setIsRefetchPlayers] = useState<boolean>(true);
 
   const handleAddAdmin = () => {
     setIsAddAdminModalOpen(true);
@@ -74,21 +76,28 @@ export default function Leaderboard({ params }: { params: string }) {
       <div className="w-full flex gap-10 mt-10">
         <Card className="w-full flex flex-col gap-4 p-4">
           <h3 className="text-xl font-bold">Leaderboard Table: {params}</h3>
-          <LeaderboardTable title={params} />
+          <LeaderboardTable
+            title={params}
+            isRefetchPlayers={isRefetchPlayers}
+          />
         </Card>
         <Card className="w-full flex flex-col gap-4 p-4">
           <h3 className="text-xl font-bold">Admin Table: {params}</h3>
-          <AdminTable />
+          <AdminTable isRefetchAdmin={isRefetchAdmin} />
         </Card>
       </div>
       <AddAdminModal
         isOpen={isAddAdminModalOpen}
         onClose={() => setIsAddAdminModalOpen(false)}
+        isRefetchAdmin={isRefetchAdmin}
+        setIsRefetchAdmin={setIsRefetchAdmin}
       />
       <AddPlayersModal
         isOpen={isAddPlayersModalOpen}
         onClose={() => setIsAddPlayersModalOpen(false)}
         title={params}
+        isRefetchPlayers={isRefetchPlayers}
+        setIsRefetchPlayers={setIsRefetchPlayers}
       />
     </div>
   );

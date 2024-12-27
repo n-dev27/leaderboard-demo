@@ -25,7 +25,12 @@ import { useToast } from "@/hooks/use-toast";
 import { AddAdminModalProps, LayoutContextType } from "@/types";
 import { LayoutContext } from "@/app/layout";
 
-export default function AddAdminModal({ isOpen, onClose }: AddAdminModalProps) {
+export default function AddAdminModal({
+  isOpen,
+  onClose,
+  isRefetchAdmin,
+  setIsRefetchAdmin,
+}: AddAdminModalProps) {
   const { toast } = useToast();
 
   const { label } = useContext<LayoutContextType>(
@@ -53,6 +58,7 @@ export default function AddAdminModal({ isOpen, onClose }: AddAdminModalProps) {
         title: "New Admin added successfully",
         description: "New Admin has been added successfully",
       });
+      setIsRefetchAdmin(!isRefetchAdmin);
       onClose();
     } else {
       toast({
