@@ -1,3 +1,8 @@
+export interface LayoutContextType {
+  label: string;
+  setLabel: (label: string) => void;
+}
+
 export interface NavItem {
   title: string;
   href?: string;
@@ -21,6 +26,11 @@ export interface AddAdminProps {
   deployment: "dev" | "prod";
   label: string;
   newAdmin: string;
+}
+
+export interface GetAdminProps {
+  deployment: "dev" | "prod";
+  label: string;
 }
 
 export interface SetScoreProps {

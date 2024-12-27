@@ -6,5 +6,6 @@ export enum LeaderboardFunction {
   updateLeaderboard = "updateLeaderboard",
   setScores = "setScoresBatch",
   addAdmin = "addAdmin",
+  getAdmin = "getAdmins",
   removeAdmin = "removeAdmin",
 }

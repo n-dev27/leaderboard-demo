@@ -1,20 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { useToast } from "@/hooks/use-toast";
-import { getLeaderboard } from "@/leaderboards/getLeaderboard";
+import { LayoutContext } from "@/app/layout";
+import { LayoutContextType } from "@/types";
 
 export default function ViewLeaderboard() {
-  const { toast } = useToast();
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [label, setLabel] = useState<string>("");
+  const { label, setLabel } = useContext<LayoutContextType>(
+    LayoutContext as React.Context<LayoutContextType>
+  );
+
   const [title, setTitle] = useState<string>("");
   const [error, setError] = useState<string>("");
 
@@ -24,31 +24,8 @@ export default function ViewLeaderboard() {
       return;
     }
     setError("");
-    setIsLoading(true);
-
-    const response = await getLeaderboard({
-      deployment: "dev",
-      label: label,
-      title: title,
-    });
-
-    console.log("response === ", response);
-
-    if (response.status) {
-      toast({
-        title: "Leaderboard fetched successfully",
-        description: "Your leaderboard has been fetched successfully",
-      });
-      localStorage.setItem("label", label);
-      localStorage.setItem("status", JSON.stringify(response.status));
-      router.push(`/${title}`);
-    } else {
-      toast({
-        title: "Leaderboard fetch failed",
-        description: "Please try again",
-      });
-    }
-    setIsLoading(false);
+    localStorage.setItem("label", label);
+    router.push(`/${title}`);
   };
 
   return (
@@ -75,13 +52,8 @@ export default function ViewLeaderboard() {
         onClick={() => handleView()}
         size="sm"
         className="px-4 py-2 min-w-[180px]"
-        disabled={isLoading}
       >
-        {isLoading ? (
-          <Spinner show={isLoading} size="small" className="text-white" />
-        ) : (
-          "View Leaderboard"
-        )}
+        View Leaderboard
       </Button>
     </div>
   );

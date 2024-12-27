@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -22,10 +22,15 @@ import { Spinner } from "@/components/ui/spinner";
 import { AdminDialogType } from "@/types";
 import { addAdmin } from "@/leaderboards/addAdmin";
 import { useToast } from "@/hooks/use-toast";
-import { AddAdminModalProps } from "@/types";
+import { AddAdminModalProps, LayoutContextType } from "@/types";
+import { LayoutContext } from "@/app/layout";
 
 export default function AddAdminModal({ isOpen, onClose }: AddAdminModalProps) {
   const { toast } = useToast();
+
+  const { label } = useContext<LayoutContextType>(
+    LayoutContext as React.Context<LayoutContextType>
+  );
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -35,13 +40,11 @@ export default function AddAdminModal({ isOpen, onClose }: AddAdminModalProps) {
     },
   });
 
-  const label = localStorage.getItem("label");
-
   async function onSubmit(values: AdminDialogType) {
     setIsLoading(true);
     const response = await addAdmin({
       deployment: "dev",
-      label: label!,
+      label: label,
       newAdmin: values.newAdmin,
     });
 

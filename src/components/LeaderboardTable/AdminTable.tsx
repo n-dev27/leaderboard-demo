@@ -7,36 +7,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getLeaderboard } from "@/leaderboards/getLeaderboard";
+import { getAdmin } from "@/leaderboards/getAdmin";
 import IndexLoading from "@/app/loading";
 import { LayoutContext } from "@/app/layout";
 import { LayoutContextType } from "@/types";
 
-export default function LeaderboardTable({ title }: { title: string }) {
+export default function AdminTable() {
   const { label } = useContext<LayoutContextType>(
     LayoutContext as React.Context<LayoutContextType>
   );
 
   const [addresses, setAddresses] = useState<[]>([]);
-  const [scores, setScores] = useState<[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchData = async () => {
+    setLoading(true);
+    const response = await getAdmin({
+      deployment: "dev",
+      label: label!,
+    });
+
+    if (response.status) {
+      setAddresses(response.status);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetch = async () => {
-      setLoading(true);
-      const response = await getLeaderboard({
-        deployment: "dev",
-        label: label,
-        title: title,
-      });
-
-      if (response.status) {
-        setAddresses(response.status[0]);
-        setScores(response.status[1]);
-      }
-      setLoading(false);
-    };
-    fetch();
+    fetchData();
   }, []);
 
   if (loading) {
@@ -49,7 +47,6 @@ export default function LeaderboardTable({ title }: { title: string }) {
         <TableRow>
           <TableHead className="w-[100px]">No</TableHead>
           <TableHead>Address</TableHead>
-          <TableHead className="text-right">Score</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -57,7 +54,6 @@ export default function LeaderboardTable({ title }: { title: string }) {
           <TableRow key={index}>
             <TableCell className="font-medium">{index + 1}</TableCell>
             <TableCell>{item}</TableCell>
-            <TableCell className="text-right">{scores[index] || "-"}</TableCell>
           </TableRow>
         ))}
       </TableBody>

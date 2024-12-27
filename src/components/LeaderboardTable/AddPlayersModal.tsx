@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -21,8 +21,12 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/hooks/use-toast";
 import { setScore } from "@/leaderboards/setScore";
-import { PlayersDialogType } from "@/types";
-import { AddPlayersModalProps } from "@/types";
+import {
+  PlayersDialogType,
+  AddPlayersModalProps,
+  LayoutContextType,
+} from "@/types";
+import { LayoutContext } from "@/app/layout";
 
 export default function AddPlayersModal({
   isOpen,
@@ -30,6 +34,10 @@ export default function AddPlayersModal({
   title,
 }: AddPlayersModalProps) {
   const { toast } = useToast();
+
+  const { label } = useContext<LayoutContextType>(
+    LayoutContext as React.Context<LayoutContextType>
+  );
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -40,13 +48,11 @@ export default function AddPlayersModal({
     },
   });
 
-  const label = localStorage.getItem("label");
-
   async function onSubmit(values: PlayersDialogType) {
     setIsLoading(true);
     const response = await setScore({
       deployment: "dev",
-      label: label!,
+      label: label,
       title: title,
       players: values.players,
       scores: values.scores,

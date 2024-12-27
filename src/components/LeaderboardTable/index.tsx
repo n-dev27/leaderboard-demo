@@ -3,15 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import LeaderboardTable from "@/components/LeaderboardTable/LeaderboardTable";
+import AdminTable from "./AdminTable";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
 import AddAdminModal from "./AddAdminModal";
 import AddPlayersModal from "./AddPlayersModal";
+import { Card } from "../ui/card";
 
 export default function Leaderboard({ params }: { params: string }) {
-  const { toast } = useToast();
   const router = useRouter();
 
   const [isAdminLoading, setIsAdminLoading] = useState<boolean>(false);
@@ -27,8 +26,6 @@ export default function Leaderboard({ params }: { params: string }) {
     setIsAddPlayersModalOpen(true);
   };
 
-  console.log("params === ", params);
-
   return (
     <div className="w-full h-screen container mx-auto py-10">
       <div className="w-full flex justify-between gap-4">
@@ -39,7 +36,6 @@ export default function Leaderboard({ params }: { params: string }) {
         >
           Back to Dashboard
         </Button>
-        <h1 className="text-3xl font-bold mb-8">Leaderboard: {params}</h1>
         <div className="flex gap-4">
           <Button
             onClick={() => handleAddAdmin()}
@@ -75,7 +71,16 @@ export default function Leaderboard({ params }: { params: string }) {
           </Button>
         </div>
       </div>
-      <LeaderboardTable />
+      <div className="w-full flex gap-10 mt-10">
+        <Card className="w-full flex flex-col gap-4 p-4">
+          <h3 className="text-xl font-bold">Leaderboard Table: {params}</h3>
+          <LeaderboardTable title={params} />
+        </Card>
+        <Card className="w-full flex flex-col gap-4 p-4">
+          <h3 className="text-xl font-bold">Admin Table: {params}</h3>
+          <AdminTable />
+        </Card>
+      </div>
       <AddAdminModal
         isOpen={isAddAdminModalOpen}
         onClose={() => setIsAddAdminModalOpen(false)}
